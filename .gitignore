@@ -1,0 +1,4 @@
+*.cap
+__pycache__
+*.txt
+py3
