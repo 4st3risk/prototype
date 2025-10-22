@@ -101,68 +101,67 @@ def compare_header_type(pktbytehex):
             return "IEEE 802.3 Data Length"
 
 now = dt.datetime.now()
-targets = logging.StreamHandler(sys.stdout), logging.FileHandler(f"packet_{now.strftime("%d-%m-%Y_%H_%M_%S")}.cap")
+targets = logging.StreamHandler(sys.stdout), logging.FileHandler(f"packet_{now.strftime("%d-%m-%Y_%H_%M_%S")}.log")
 logging.basicConfig(format='%(message)s', level=logging.INFO, handlers=targets)
 
-def main():
+def handler(pkt):
 
     targets[0].terminator=''
     targets[1].terminator=''
     filter = ""
-    if len(sys.argv) < 2:
-        print(f"Usage: {sys.argv[0]} [filter]")
-    else:
-        filter = sys.argv[1]
+    iface = ""
+
+    logging.info(f"Filter: [{sys.argv[2]}]\nInterface: [{sys.argv[1]}]")
 
 
-    logging.info(f"Filter is [{sys.argv[1]}]\n\n")
+    ip = pkt[0][1]
+    logging.info('-' * 64)
+    logging.info("\n")
+    pkthex = hexlify(bytes(pkt[0])).decode()
+    pktbytehex = bytes(pkt[0])
 
-    try:
-        while(1):
-            pkt = sniff(filter=filter, count=1)
-
-            ip = pkt[0][1]
-            logging.info('-' * 64)
-            logging.info("\n")
-            pkthex = hexlify(bytes(pkt[0])).decode()
-            pktbytehex = bytes(pkt[0])
-
-            result = compare_header_type(pktbytehex)
-            logging.info(f"Type is:\t{result}\n")
+    result = compare_header_type(pktbytehex)
+    logging.info(f"Type is:\t{result}\n")
 
         #        print(f"Protocol is: {IP_PROTOCOL[int(bytes(pkt[0])[23])]}")
         #        print(hex(bytes(pkt[0])[23]))
-            logging.info(f"Protocol is:\t{IP_PROTOCOL[rethex(pkt, 23)]}\n")
-            logging.info("\n")
+    logging.info(f"Protocol is:\t{IP_PROTOCOL[rethex(pkt, 23)]}\n")
+    logging.info("\n")
 
-            logging.info("Destination Address is:\t")
+    logging.info("Destination Address is:\t")
 
-            dst = pkthex[0:12]
-            print_mac(split_hex(dst))
+    dst = pkthex[0:12]
+    print_mac(split_hex(dst))
 
-            logging.info("Source Address is:\t")
+    logging.info("Source Address is:\t")
 
-            src = pkthex[12:24]
-            print_mac(split_hex(src))
+    src = pkthex[12:24]
+    print_mac(split_hex(src))
 
-            src_port = combine_hex(set_hexs(hexnor(hex(pktbytehex[34])), hexnor(hex(pktbytehex[35]))))
-            logging.info(f"Source Port is:\t\t{int(src_port, 16)}\n")
+    src_port = combine_hex(set_hexs(hexnor(hex(pktbytehex[34])), hexnor(hex(pktbytehex[35]))))
+    logging.info(f"Source Port is:\t\t{int(src_port, 16)}\n")
 
-            dst_port = combine_hex(set_hexs(hexnor(hex(pktbytehex[36])), hexnor(hex(pktbytehex[37]))))
-            logging.info(f"Destination Port is:\t{int(dst_port, 16)}\n")
-            logging.info("\n")
+    dst_port = combine_hex(set_hexs(hexnor(hex(pktbytehex[36])), hexnor(hex(pktbytehex[37]))))
+    logging.info(f"Destination Port is:\t{int(dst_port, 16)}\n")
+    logging.info("\n")
 
-            logging.info(hexdump(pkt[0], dump=True))
-            logging.info("\n")
-    except Exception as e:
-        print(f"Quit Program ... exit code: {e}")
-    finally:
-        print("Program Terminated.")
+    logging.info(hexdump(pkt[0], dump=True))
+    logging.info("\n\n")
+
+def main():
+
+    filter = ''
+    iface = ''
+
+    if len(sys.argv) > 3:
+        print(f"Usage: {sys.argv[0]} [interface] [filter] ")
+    else:
+        iface = sys.argv[1]
+        filter = sys.argv[2]
+        
+    sniff(iface=iface, filter=filter, prn=handler, store=False)
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except:
-            pass
+    main()
 
