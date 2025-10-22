@@ -34,6 +34,6 @@ if __name__ == "__main__":
         sys.exit()
     key = sys.argv[1]
 
-    netcat_client("192.168.53.9", 9090, key)
+    netcat_client("192.168.53.11", 9090, key)
 
 

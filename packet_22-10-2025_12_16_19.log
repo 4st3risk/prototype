@@ -1,0 +1,32 @@
+Filter: [tcp]
+Interface: [ens33]----------------------------------------------------------------
+Type is:	IPv4
+Protocol is:	TCP
+
+Destination Address is:	64:E5:99:79:E7:5E: 
+Source Address is:	00:0C:29:8D:B7:AE: 
+Source Port is:		51076
+Destination Port is:	443
+
+0000  64 E5 99 79 E7 5E 00 0C 29 8D B7 AE 08 00 45 00  d..y.^..).....E.
+0010  00 34 BB 5C 40 00 40 06 8A 2C C0 A8 35 08 34 CF  .4.\@.@..,..5.4.
+0020  CA BB C7 84 01 BB 99 B9 49 FE 0B FF BE 6B 80 10  ........I....k..
+0030  00 48 F5 61 00 00 01 01 08 0A 15 34 66 01 0D 4C  .H.a.......4f..L
+0040  0F FF                                            ..
+
+Filter: [tcp]
+Interface: [ens33]----------------------------------------------------------------
+Type is:	IPv4
+Protocol is:	TCP
+
+Destination Address is:	00:0C:29:8D:B7:AE: 
+Source Address is:	64:E5:99:79:E7:5E: 
+Source Port is:		443
+Destination Port is:	51076
+
+0000  00 0C 29 8D B7 AE 64 E5 99 79 E7 5E 08 00 45 00  ..)...d..y.^..E.
+0010  00 34 76 05 40 00 36 06 D9 83 34 CF CA BB C0 A8  .4v.@.6...4.....
+0020  35 08 01 BB C7 84 0B FF BE 6B 99 B9 49 FF 80 10  5........k..I...
+0030  02 A8 46 6F 00 00 01 01 08 0A 0D 4C 86 02 15 32  ..Fo.......L...2
+0040  18 87                                            ..
+
