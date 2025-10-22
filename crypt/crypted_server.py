@@ -27,7 +27,7 @@ def netcat_server(port, key):
             print(f"<<< {data}")
 
             response = data
-            response = xor_data(response.encode(), key.encode())
+            response = xor_data(response, key.encode())
             # print("# Data encrypted")
             conn.sendall(response)
             # print("# Data Send")
